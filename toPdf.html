@@ -1,0 +1,90 @@
+<html>
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script type="text/javascript">
+      // this function is based on code found:
+      // http://www.filamentgroup.com/lab/jquery_plugin_for_requesting_ajax_like_file_downloads/
+      // to easily make a form and POST it
+      var download = function(url, data, method){
+        //url and data options required
+        if( url && data ){
+          jQuery('<form style="display: none" id="dr_submission" action="' + url
+                 + '" method="' + (method||'post') + '">'
+                 + '</form>').appendTo('body');
+          //credentials
+          jQuery('form#dr_submission').append('<textarea name="user_credentials"></textarea>');
+          jQuery('form#dr_submission textarea[name=user_credentials]').val(data.user_credentials);
+
+          //doc values
+          for(var key in data.doc) {
+            jQuery('form#dr_submission').append('<textarea name="doc['+key+']"></textarea>');
+            jQuery('form#dr_submission textarea[name="doc['+key+']"]').val(data.doc[key]);
+          }
+
+          //submit the form
+          if(confirm("press ok")) {jQuery('form#dr_submission').submit().remove(); }
+        };
+      };
+
+      // setup the string represeting the html we want to submit
+      var content = '<style>';
+    content += 'p{';
+    content += '  margin:50px 50px 0px 50px;';
+    content += '}';
+    content += 'td{';
+    content += '  border:1px solid lightgray;';
+    content += '}';
+    content += 'p#customer{';
+    content += '  text-align:justify;';
+    content += '}';
+content += '</style>';
+content += '<div>';
+ content += ' <p id="customer">Заказик:____________________</p>';
+ content += ' <p>Дата:_______________________</p> ';
+ content += ' <p>Счет№:______________________</p>';
+content += '<center>';
+  content += '<table class="first" cellpadding="4" cellspacing="6">';
+   content += ' <tr>';
+   content += '   <th width="50" align="center">№</th>';
+content += '  <th width="250" align="center">Наименование товара</th>';
+    content + = '  <th width="100" align="center">Количество</th>';
+    content += '  <th width="100" align="center">Цена</th>';
+    content += '  <th width="100" align="center">Сумма</th>';
+    content += '</tr>';
+    content += '<tr>';
+    content += '  <td width="50" align="center">1</td>';
+    content += '  <td width="250" align="center">asdfs</td>';
+    content += '  <td width="100" align="center">24</td>';
+     content += ' <td width="100" align="center">444tg</td>';
+    content += '  <td width="100" align="center">4444</td>';
+    content += '</tr>';
+   content += ' <tr>';
+    content += '  <td width="50" align="center"></td>';
+    content += '  <td width="250" align="center">asdfs</td>';
+    content += '  <td width="100" align="center">24</td>';
+    content += '  <td width="100" align="center">444tg</td>';
+    content += '  <td width="100" align="center">4444</td>';
+   content += ' </tr>';
+ content += ' </table>';
+content += '</center>';
+      // var content = 'This is a sample PDF created using jQuery. Find more examples of what you can do with DocRaptor <a href="https://docraptor.com/">https://docraptor.com/</a> or contact support@docraptor.com with any questions.';
+
+      var data = {
+        doc: {
+          test: true,
+          type: 'pdf',
+          document_content: content
+        },
+        user_credentials: "YOUR_API_KEY_HERE"
+      };
+
+      var call_download = function() {
+        // this drops a form on the page and submits, which will result in a download dialog popping up
+        download("http://docraptor.com/docs", data);
+      };
+    </script>
+  </head>
+  <body>
+    <input type="button" value="submit" onclick="call_download();" />
+  </body>
+</html>
